@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Property, ABUJA_DISTRICTS, formatNaira, formatUSD } from '../data/properties';
+import { Property, ABUJA_DISTRICTS, formatNaira, formatUSD, ASSET_IMAGES } from '../data/properties';
 import { PropertyCard } from '../components/PropertyCard';
 import { AbujaInteractiveMap } from '../components/AbujaInteractiveMap';
 import {
@@ -51,9 +51,16 @@ export const HomePage: React.FC<HomePageProps> = ({
         {/* Background Photograph */}
         <div className="absolute inset-0 z-0">
           <img
-            src="/src/assets/images/hero_abuja_luxury_villa_1794063269976.jpg"
+            src={ASSET_IMAGES.hero}
             alt="Abuja Luxury Villa"
             referrerPolicy="no-referrer"
+            onError={(e) => {
+              const target = e.currentTarget;
+              if (!target.dataset.fallback) {
+                target.dataset.fallback = 'true';
+                target.src = '/images/hero_abuja_luxury_villa_1794063269976.jpg';
+              }
+            }}
             className="w-full h-full object-cover object-center brightness-[0.4] scale-105 transition-transform duration-1000"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#121316] via-[#121316]/50 to-transparent" />

@@ -81,6 +81,13 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
                 src={property.images[activeImageIdx]}
                 alt={property.title}
                 referrerPolicy="no-referrer"
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  if (!target.dataset.fallback) {
+                    target.dataset.fallback = 'true';
+                    target.src = '/images/hero_abuja_luxury_villa_1794063269976.jpg';
+                  }
+                }}
                 className="w-full h-full object-cover"
               />
 
@@ -120,7 +127,19 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
                       activeImageIdx === idx ? 'border-[#C5A880]' : 'border-transparent opacity-60 hover:opacity-100'
                     }`}
                   >
-                    <img src={img} alt="Thumbnail" className="w-full h-full object-cover" />
+                    <img
+                      src={img}
+                      alt="Thumbnail"
+                      referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (!target.dataset.fallback) {
+                          target.dataset.fallback = 'true';
+                          target.src = '/images/hero_abuja_luxury_villa_1794063269976.jpg';
+                        }
+                      }}
+                      className="w-full h-full object-cover"
+                    />
                   </button>
                 ))}
               </div>

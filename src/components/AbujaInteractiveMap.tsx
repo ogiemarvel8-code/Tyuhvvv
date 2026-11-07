@@ -96,6 +96,13 @@ export const AbujaInteractiveMap: React.FC<AbujaInteractiveMapProps> = ({
                       src={activeProperty.images[0]}
                       alt={activeProperty.title}
                       referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (!target.dataset.fallback) {
+                          target.dataset.fallback = 'true';
+                          target.src = '/images/hero_abuja_luxury_villa_1794063269976.jpg';
+                        }
+                      }}
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute top-2 left-2 bg-[#121316]/80 backdrop-blur-sm px-2 py-0.5 rounded text-[11px] text-[#C5A880] font-medium">

@@ -30,6 +30,13 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
           alt={property.title}
           referrerPolicy="no-referrer"
           loading="lazy"
+          onError={(e) => {
+            const target = e.currentTarget;
+            if (!target.dataset.fallback) {
+              target.dataset.fallback = 'true';
+              target.src = '/images/hero_abuja_luxury_villa_1794063269976.jpg';
+            }
+          }}
           className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
         />
 

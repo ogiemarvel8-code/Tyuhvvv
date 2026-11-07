@@ -320,6 +320,13 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
                   src={prop.images[0]}
                   alt={prop.title}
                   referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (!target.dataset.fallback) {
+                      target.dataset.fallback = 'true';
+                      target.src = '/images/hero_abuja_luxury_villa_1794063269976.jpg';
+                    }
+                  }}
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute top-3 left-3 bg-[#121316]/85 backdrop-blur-md px-2.5 py-1 rounded text-xs text-[#E8E3D9]">

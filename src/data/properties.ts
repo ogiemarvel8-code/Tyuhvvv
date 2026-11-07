@@ -1,3 +1,17 @@
+import maitamaDuplexImg from '../assets/images/maitama_duplex_residence_1794063270579.jpg';
+import heroVillaImg from '../assets/images/hero_abuja_luxury_villa_1794063269976.jpg';
+import guzapeMansionImg from '../assets/images/guzape_modern_mansion_1794063272211.jpg';
+import katampeResidenceImg from '../assets/images/katampe_luxury_residence_1794063272325.jpg';
+import asokoroEstateImg from '../assets/images/asokoro_hilltop_estate_1794063271005.jpg';
+
+export const ASSET_IMAGES = {
+  hero: heroVillaImg,
+  maitama: maitamaDuplexImg,
+  guzape: guzapeMansionImg,
+  katampe: katampeResidenceImg,
+  asokoro: asokoroEstateImg
+};
+
 export interface Property {
   id: string;
   code: string;
@@ -64,8 +78,8 @@ export const INITIAL_PROPERTIES: Property[] = [
     ],
     featured: true,
     images: [
-      '/src/assets/images/maitama_duplex_residence_1794063270579.jpg',
-      '/src/assets/images/hero_abuja_luxury_villa_1794063269976.jpg'
+      maitamaDuplexImg,
+      heroVillaImg
     ],
     sourceAttribution: 'PropertyPro Nigeria',
     sourceUrlText: 'propertypro.ng/advert/maitama-ministers-quarters-duplex',
@@ -112,8 +126,8 @@ export const INITIAL_PROPERTIES: Property[] = [
     ],
     featured: true,
     images: [
-      '/src/assets/images/guzape_modern_mansion_1794063272211.jpg',
-      '/src/assets/images/hero_abuja_luxury_villa_1794063269976.jpg'
+      guzapeMansionImg,
+      heroVillaImg
     ],
     sourceAttribution: 'PropertyAgentsNG',
     sourceUrlText: 'propertyagentsng.com/listings/fha-guzape-5bed-detached',
@@ -160,8 +174,8 @@ export const INITIAL_PROPERTIES: Property[] = [
     ],
     featured: true,
     images: [
-      '/src/assets/images/katampe_luxury_residence_1794063272325.jpg',
-      '/src/assets/images/hero_abuja_luxury_villa_1794063269976.jpg'
+      katampeResidenceImg,
+      heroVillaImg
     ],
     sourceAttribution: 'PropertyAgentsNG',
     sourceUrlText: 'propertyagentsng.com/listings/katampe-extension-4bed',
@@ -208,8 +222,8 @@ export const INITIAL_PROPERTIES: Property[] = [
     ],
     featured: true,
     images: [
-      '/src/assets/images/asokoro_hilltop_estate_1794063271005.jpg',
-      '/src/assets/images/hero_abuja_luxury_villa_1794063269976.jpg'
+      asokoroEstateImg,
+      heroVillaImg
     ],
     sourceAttribution: 'Nigeria Property Centre',
     sourceUrlText: 'nigeriapropertycentre.com/for-sale/houses/detached-duplexes/abuja/asokoro/1.2b-5bed-rooftop',
@@ -256,8 +270,8 @@ export const INITIAL_PROPERTIES: Property[] = [
     ],
     featured: false,
     images: [
-      '/src/assets/images/hero_abuja_luxury_villa_1794063269976.jpg',
-      '/src/assets/images/maitama_duplex_residence_1794063270579.jpg'
+      heroVillaImg,
+      maitamaDuplexImg
     ],
     sourceAttribution: 'Private Property Nigeria',
     sourceUrlText: 'privateproperty.com.ng/abuja/wuse-2/luxury-penthouse',
@@ -304,8 +318,8 @@ export const INITIAL_PROPERTIES: Property[] = [
     ],
     featured: false,
     images: [
-      '/src/assets/images/hero_abuja_luxury_villa_1794063269976.jpg',
-      '/src/assets/images/asokoro_hilltop_estate_1794063271005.jpg'
+      heroVillaImg,
+      asokoroEstateImg
     ],
     sourceAttribution: 'PropertyPro Nigeria',
     sourceUrlText: 'propertypro.ng/advert/maitama-ambassadorial-compound',

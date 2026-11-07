@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Property, formatNaira } from '../data/properties';
+import { Property, formatNaira, ASSET_IMAGES } from '../data/properties';
 import {
   ShieldCheck,
   Building2,
@@ -142,9 +142,16 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
         <div className="lg:col-span-6">
           <div className="relative rounded-3xl overflow-hidden border border-[#2A2D35] bg-[#181A1F] shadow-2xl">
             <img
-              src="/src/assets/images/maitama_duplex_residence_1794063270579.jpg"
+              src={ASSET_IMAGES.maitama}
               alt="Vantage Maitama Architectural Residence"
               referrerPolicy="no-referrer"
+              onError={(e) => {
+                const target = e.currentTarget;
+                if (!target.dataset.fallback) {
+                  target.dataset.fallback = 'true';
+                  target.src = '/images/maitama_duplex_residence_1794063270579.jpg';
+                }
+              }}
               className="w-full h-[450px] object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#121316] via-transparent to-transparent" />
