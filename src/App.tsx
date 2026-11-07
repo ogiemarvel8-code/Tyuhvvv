@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { INITIAL_PROPERTIES, Property } from './data/properties';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
@@ -24,20 +24,6 @@ export default function App() {
   const [inspectionTargetProperty, setInspectionTargetProperty] = useState<Property | null>(null);
   const [isInspectionModalOpen, setIsInspectionModalOpen] = useState(false);
   const [isListingManagerOpen, setIsListingManagerOpen] = useState(false);
-
-  // Google Maps Platform Demo Key quota state listener
-  const [gmpQuotaExceeded, setGmpQuotaExceeded] = useState(false);
-
-  useEffect(() => {
-    const handleQuotaExceeded = () => {
-      setGmpQuotaExceeded(true);
-    };
-
-    window.addEventListener('gmp-quota-exceeded', handleQuotaExceeded);
-    return () => {
-      window.removeEventListener('gmp-quota-exceeded', handleQuotaExceeded);
-    };
-  }, []);
 
   const handleToggleCurrency = () => {
     setCurrency((prev) => (prev === 'NGN' ? 'USD' : 'NGN'));
@@ -60,24 +46,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#121316] text-[#F4F0E8] flex flex-col font-sans selection:bg-[#C5A880] selection:text-[#121316]">
-      
-      {/* Google Maps Quota Warning Banner (Mandatory Demo Key Handler) */}
-      {gmpQuotaExceeded && (
-        <div className="bg-amber-50 border-b border-amber-200 text-amber-900 px-4 py-2.5 text-xs md:text-sm text-center sticky top-0 z-50 shadow-sm">
-          <span>
-            Google Maps Platform quota reached. If you are the app owner, visit{' '}
-            <a
-              href="https://developers.google.com/maps/ai/ai-studio?utm_campaign=gmp_mcp_codeassist_v1_aistudio#quota_exceeded_errors"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline font-semibold text-amber-950 hover:text-amber-800"
-            >
-              maps developer site
-            </a>{' '}
-            for instructions to update your account.
-          </span>
-        </div>
-      )}
 
       {/* Top Navigation */}
       <Navbar

@@ -1,7 +1,6 @@
-import React, { useState, useCallback } from 'react';
-import { APIProvider, Map, AdvancedMarker, InfoWindow } from '@vis.gl/react-google-maps';
-import { Property, formatNaira } from '../data/properties';
-import { MapPin, ExternalLink, ShieldCheck, Bed, Bath, ArrowUpRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { Property, formatNaira, formatUSD } from '../data/properties';
+import { MapPin, ShieldCheck, ArrowUpRight, Bed, Bath, Compass, CheckCircle2, ChevronRight } from 'lucide-react';
 
 interface AbujaInteractiveMapProps {
   properties: Property[];
@@ -11,8 +10,32 @@ interface AbujaInteractiveMapProps {
   height?: string;
 }
 
-// Center of Abuja luxury golden corridor (Maitama - Central Area - Asokoro)
-const ABUJA_CENTER = { lat: 9.0667, lng: 7.4883 };
+// Visual layout coordinates for Abuja Prime Districts on our bespoke architectural map canvas (percentage 0-100)
+const DISTRICT_NODES: Record<string, { x: number; y: number; label: string; tag: string }> = {
+  'Katampe Extension': { x: 22, y: 22, label: 'Katampe Extension', tag: 'Diplomatic Hills · Elevated Plateau' },
+  'Maitama': { x: 50, y: 32, label: 'Maitama', tag: "Ministers' Quarters · Sovereign Axis" },
+  'Wuse II': { x: 30, y: 55, label: 'Wuse II', tag: 'Metropolitan Core · Luxury Penthouses' },
+  'Asokoro': { x: 75, y: 48, label: 'Asokoro', tag: 'Presidential Ridge · Aso Rock Vistas' },
+  'Guzape': { x: 62, y: 78, label: 'Guzape', tag: 'Asokoro Extension · Modern Mansions' }
+};
+
+// Map property pins to relative coordinates on our canvas based on their district and index
+function getPropertyCanvasPosition(prop: Property, index: number): { x: number; y: number } {
+  const base = DISTRICT_NODES[prop.district] || { x: 50, y: 50 };
+  // Small deterministic offset so multiple properties in same district don't overlap completely
+  const offsets = [
+    { dx: 0, dy: 0 },
+    { dx: 6, dy: -4 },
+    { dx: -5, dy: 6 },
+    { dx: 7, dy: 5 },
+    { dx: -6, dy: -5 }
+  ];
+  const offset = offsets[index % offsets.length];
+  return {
+    x: Math.min(90, Math.max(10, base.x + offset.dx)),
+    y: Math.min(90, Math.max(12, base.y + offset.dy))
+  };
+}
 
 export const AbujaInteractiveMap: React.FC<AbujaInteractiveMapProps> = ({
   properties,
@@ -21,137 +44,189 @@ export const AbujaInteractiveMap: React.FC<AbujaInteractiveMapProps> = ({
   activeDistrict,
   height = '520px'
 }) => {
-  const [activeMarkerId, setActiveMarkerId] = useState<string | null>(null);
-  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
+  const [activePinId, setActivePinId] = useState<string | null>(properties[0]?.id || null);
 
   const filteredProperties = activeDistrict && activeDistrict !== 'All'
     ? properties.filter(p => p.district === activeDistrict)
     : properties;
 
-  const activeProperty = properties.find(p => p.id === activeMarkerId) || selectedProperty;
+  const activeProperty = properties.find(p => p.id === activePinId) || selectedProperty || filteredProperties[0];
 
-  const handleMarkerClick = useCallback((prop: Property) => {
-    setActiveMarkerId(prop.id);
+  const handlePinClick = (prop: Property) => {
+    setActivePinId(prop.id);
     if (onSelectProperty) {
       onSelectProperty(prop);
     }
-  }, [onSelectProperty]);
+  };
 
   return (
-    <div className="relative w-full rounded-2xl overflow-hidden border border-[#2A2D35] bg-[#181A1F] shadow-2xl">
-      {/* Map Header Overlay */}
-      <div className="absolute top-4 left-4 z-10 bg-[#121316]/90 backdrop-blur-md border border-[#2A2D35] px-4 py-2.5 rounded-xl shadow-lg flex items-center gap-3">
-        <div className="w-2 h-2 rounded-full bg-[#C5A880] animate-pulse" />
-        <span className="text-xs uppercase tracking-wider text-[#A0A4B0] font-medium">Abuja Prime Corridors</span>
-        <span className="text-xs text-[#E8E3D9] font-serif">· {filteredProperties.length} Verified Properties</span>
-      </div>
-
-      <div style={{ height, width: '100%' }}>
-        <APIProvider apiKey={apiKey}>
-          <Map
-            mapId="DEMO_MAP_ID"
-            defaultCenter={ABUJA_CENTER}
-            defaultZoom={12}
-            gestureHandling="greedy"
-            disableDefaultUI={false}
-            internalUsageAttributionIds={['gmp_mcp_codeassist_v1_aistudio']}
-            style={{ width: '100%', height: '100%' }}
-          >
-            {filteredProperties.map((prop) => {
-              const isSelected = activeProperty?.id === prop.id;
-              return (
-                <AdvancedMarker
-                  key={prop.id}
-                  position={prop.coordinates}
-                  title={`${prop.title} - ${formatNaira(prop.priceNaira)}`}
-                  onClick={() => handleMarkerClick(prop)}
-                >
-                  <div className={`cursor-pointer transition-all duration-300 transform -translate-x-1/2 -translate-y-full hover:scale-110 ${
-                    isSelected ? 'scale-110 z-50' : 'z-20'
-                  }`}>
-                    <div className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold shadow-2xl border flex items-center gap-1.5 whitespace-nowrap ${
-                      isSelected
-                        ? 'bg-[#C5A880] text-[#121316] border-white font-bold ring-4 ring-[#C5A880]/30'
-                        : 'bg-[#181A1F] text-[#F4F0E8] border-[#383D48] hover:border-[#C5A880]'
-                    }`}>
-                      <MapPin className="w-3.5 h-3.5 text-[#C5A880]" />
-                      <span>{formatNaira(prop.priceNaira)}</span>
-                    </div>
-                    {/* Marker pointer triangle */}
-                    <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-[#181A1F] mx-auto" />
-                  </div>
-                </AdvancedMarker>
-              );
-            })}
-
-            {activeProperty && (
-              <InfoWindow
-                position={activeProperty.coordinates}
-                onCloseClick={() => setActiveMarkerId(null)}
-                pixelOffset={[0, -40]}
-              >
-                <div className="p-1 max-w-[280px] bg-[#121316] text-[#F4F0E8] rounded-xl font-sans">
-                  <div className="relative h-28 w-full rounded-lg overflow-hidden mb-2.5 bg-[#181A1F]">
-                    <img
-                      src={activeProperty.images[0]}
-                      alt={activeProperty.title}
-                      referrerPolicy="no-referrer"
-                      onError={(e) => {
-                        const target = e.currentTarget;
-                        if (!target.dataset.fallback) {
-                          target.dataset.fallback = 'true';
-                          target.src = '/images/hero_abuja_luxury_villa_1794063269976.jpg';
-                        }
-                      }}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute top-2 left-2 bg-[#121316]/80 backdrop-blur-sm px-2 py-0.5 rounded text-[11px] text-[#C5A880] font-medium">
-                      {activeProperty.district}
-                    </div>
-                  </div>
-
-                  <h4 className="font-serif text-sm font-semibold text-white leading-tight mb-1 line-clamp-1">
-                    {activeProperty.title}
-                  </h4>
-
-                  <p className="text-xs text-[#A0A4B0] mb-2 flex items-center gap-1">
-                    <MapPin className="w-3 h-3 text-[#C5A880] shrink-0" />
-                    <span className="truncate">{activeProperty.locationDetail}</span>
-                  </p>
-
-                  <div className="flex items-center justify-between pt-2 border-t border-[#2A2D35] text-xs">
-                    <div>
-                      <div className="text-[10px] uppercase tracking-wider text-[#A0A4B0]">Asking Price</div>
-                      <div className="font-serif text-sm font-bold text-[#C5A880]">
-                        {formatNaira(activeProperty.priceNaira)}
-                      </div>
-                    </div>
-
-                    {onSelectProperty && (
-                      <button
-                        onClick={() => onSelectProperty(activeProperty)}
-                        className="px-3 py-1.5 rounded-lg bg-[#C5A880] text-[#121316] font-medium text-xs hover:bg-[#D4AF37] transition-colors flex items-center gap-1"
-                      >
-                        <span>Details</span>
-                        <ArrowUpRight className="w-3 h-3" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </InfoWindow>
-            )}
-          </Map>
-        </APIProvider>
-      </div>
-
-      {/* Footer attribution strip */}
-      <div className="bg-[#121316] border-t border-[#2A2D35] px-4 py-2 flex flex-wrap items-center justify-between text-[11px] text-[#A0A4B0]">
-        <div className="flex items-center gap-2">
-          <ShieldCheck className="w-3.5 h-3.5 text-[#C5A880]" />
-          <span>All coordinates verified in Abuja FCT prime zones (Maitama, Asokoro, Guzape, Katampe Ext, Wuse II)</span>
+    <div className="relative w-full rounded-3xl overflow-hidden border border-[#2A2D35] bg-[#14161A] shadow-2xl flex flex-col justify-between" style={{ minHeight: height }}>
+      
+      {/* Top Header Bar */}
+      <div className="p-4 sm:p-5 bg-[#121316] border-b border-[#252830] flex flex-wrap items-center justify-between gap-3 z-10">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-[#C5A880]/10 border border-[#C5A880]/30 flex items-center justify-center text-[#C5A880]">
+            <Compass className="w-4 h-4" />
+          </div>
+          <div>
+            <span className="text-[10px] uppercase tracking-widest text-[#C5A880] font-semibold block">
+              Bespoke District Radar
+            </span>
+            <span className="font-serif text-sm font-bold text-white">
+              Abuja Prime Corridor Navigator
+            </span>
+          </div>
         </div>
-        <div className="text-[#C5A880]/80">Interactive Google Maps Grounding</div>
+
+        <div className="flex items-center gap-2 text-xs text-[#A0A4B0]">
+          <span className="w-2 h-2 rounded-full bg-[#C5A880] animate-pulse" />
+          <span className="text-[#E8E3D9]">{filteredProperties.length} Properties Pinned</span>
+          <span>·</span>
+          <span>5 Sovereign Zones</span>
+        </div>
       </div>
+
+      {/* Main Architectural Map Canvas */}
+      <div className="relative flex-1 w-full min-h-[380px] sm:min-h-[440px] bg-[#121316] overflow-hidden p-6 select-none">
+        
+        {/* Subtle Architectural Grid Lines & Contour Rings */}
+        <div className="absolute inset-0 opacity-20 pointer-events-none">
+          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#C5A880" strokeWidth="0.5" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)" />
+            {/* Concentric topographic rings representing Abuja's rolling topography */}
+            <circle cx="50%" cy="45%" r="38%" fill="none" stroke="#C5A880" strokeWidth="1" strokeDasharray="4 8" opacity="0.4" />
+            <circle cx="50%" cy="45%" r="24%" fill="none" stroke="#C5A880" strokeWidth="1" strokeDasharray="3 6" opacity="0.6" />
+            <circle cx="50%" cy="45%" r="10%" fill="none" stroke="#C5A880" strokeWidth="1" opacity="0.8" />
+          </svg>
+        </div>
+
+        {/* Landmark Accents in Background */}
+        <div className="absolute top-8 right-10 text-right opacity-30 pointer-events-none">
+          <div className="font-serif text-xs uppercase tracking-widest text-[#C5A880]">Aso Rock Geological Ridge</div>
+          <div className="text-[10px] text-[#A0A4B0]">Presidential Protected Zone</div>
+        </div>
+
+        <div className="absolute bottom-8 left-8 opacity-30 pointer-events-none">
+          <div className="font-serif text-xs uppercase tracking-widest text-[#C5A880]">Federal Capital Central Ring</div>
+          <div className="text-[10px] text-[#A0A4B0]">Shehu Shagari Way Axis</div>
+        </div>
+
+        {/* District Region Outlines & Badges */}
+        {Object.entries(DISTRICT_NODES).map(([distName, node]) => (
+          <div
+            key={distName}
+            style={{ left: `${node.x}%`, top: `${node.y}%` }}
+            className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0 text-center"
+          >
+            <div className="w-24 h-24 rounded-full border border-[#C5A880]/15 bg-[#C5A880]/5 mx-auto -mb-14" />
+            <span className="font-serif text-xs font-semibold tracking-wider text-[#A0A4B0]/80 uppercase block">
+              {distName}
+            </span>
+            <span className="text-[9px] text-[#C5A880]/60 block">{node.tag.split('·')[0]}</span>
+          </div>
+        ))}
+
+        {/* Interactive Property Markers */}
+        {filteredProperties.map((prop, idx) => {
+          const pos = getPropertyCanvasPosition(prop, idx);
+          const isSelected = activeProperty?.id === prop.id;
+
+          return (
+            <div
+              key={prop.id}
+              style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
+              onClick={() => handlePinClick(prop)}
+              className={`absolute cursor-pointer transition-all duration-300 transform -translate-x-1/2 -translate-y-full z-20 group ${
+                isSelected ? 'scale-115 z-40' : 'hover:scale-110'
+              }`}
+            >
+              {/* Pin Pill with Price */}
+              <div className={`px-3 py-1.5 rounded-xl text-xs font-semibold shadow-2xl border flex items-center gap-1.5 whitespace-nowrap transition-all ${
+                isSelected
+                  ? 'bg-[#C5A880] text-[#121316] border-white font-bold ring-4 ring-[#C5A880]/30 shadow-[#C5A880]/30'
+                  : 'bg-[#181A1F] text-[#F4F0E8] border-[#383D48] hover:border-[#C5A880] hover:text-white'
+              }`}>
+                <MapPin className={`w-3.5 h-3.5 ${isSelected ? 'text-[#121316]' : 'text-[#C5A880]'}`} />
+                <span>{formatNaira(prop.priceNaira)}</span>
+              </div>
+
+              {/* Pin Arrow Pointer */}
+              <div className={`w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] mx-auto transition-colors ${
+                isSelected ? 'border-t-[#C5A880]' : 'border-t-[#181A1F]'
+              }`} />
+            </div>
+          );
+        })}
+
+        {/* Active Property Preview Card overlay inside canvas */}
+        {activeProperty && (
+          <div className="absolute bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:w-80 bg-[#181A1F]/95 backdrop-blur-md rounded-2xl border border-[#383D48] p-3.5 shadow-2xl z-30 transition-all text-xs">
+            <div className="flex gap-3">
+              <div className="relative w-24 h-20 rounded-xl overflow-hidden shrink-0 bg-black">
+                <img
+                  src={activeProperty.images[0]}
+                  alt={activeProperty.title}
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    if (!target.dataset.fallback) {
+                      target.dataset.fallback = 'true';
+                      target.src = '/images/hero_abuja_luxury_villa_1794063269976.jpg';
+                    }
+                  }}
+                  className="w-full h-full object-cover"
+                />
+                <span className="absolute bottom-1 left-1 bg-[#121316]/80 text-[9px] px-1.5 py-0.5 rounded text-[#C5A880]">
+                  {activeProperty.district}
+                </span>
+              </div>
+
+              <div className="flex-1 min-w-0">
+                <h4 className="font-serif font-bold text-white text-xs truncate leading-snug">
+                  {activeProperty.title}
+                </h4>
+                <div className="text-[11px] text-[#A0A4B0] mt-0.5 truncate">
+                  {activeProperty.locationDetail}
+                </div>
+                <div className="font-serif text-sm font-bold text-[#C5A880] mt-1">
+                  {formatNaira(activeProperty.priceNaira)}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-3 pt-2.5 border-t border-[#252830] flex items-center justify-between">
+              <span className="text-[10px] text-[#A0A4B0]">
+                {activeProperty.bedrooms} Beds · {activeProperty.bathrooms} Baths
+              </span>
+
+              {onSelectProperty && (
+                <button
+                  onClick={() => onSelectProperty(activeProperty)}
+                  className="px-3 py-1 rounded-lg bg-[#C5A880] text-[#121316] font-semibold text-xs hover:bg-[#D4AF37] transition-all flex items-center gap-1"
+                >
+                  <span>View Details</span>
+                  <ArrowUpRight className="w-3 h-3" />
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Footer Info Strip */}
+      <div className="p-3 sm:p-4 bg-[#121316] border-t border-[#252830] flex flex-wrap items-center justify-between gap-2 text-xs text-[#A0A4B0]">
+        <div className="flex items-center gap-2">
+          <ShieldCheck className="w-4 h-4 text-[#C5A880]" />
+          <span>Independent Abuja Luxury Property Radar · Maitama, Asokoro, Guzape, Katampe Ext, Wuse II</span>
+        </div>
+        <div className="text-[#C5A880] font-mono text-[11px]">Vantage Prime Coordinates</div>
+      </div>
+
     </div>
   );
 };

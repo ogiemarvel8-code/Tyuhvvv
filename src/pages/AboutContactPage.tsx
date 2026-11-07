@@ -16,9 +16,10 @@ import {
   Award,
   Users2,
   Briefcase,
-  TrendingUp
+  TrendingUp,
+  Compass,
+  Navigation
 } from 'lucide-react';
-import { APIProvider, Map, AdvancedMarker } from '@vis.gl/react-google-maps';
 
 interface AboutContactPageProps {
   properties: Property[];
@@ -41,8 +42,6 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [ticketRef, setTicketRef] = useState('');
-
-  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -363,25 +362,38 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
             </div>
           </div>
 
-          {/* Interactive Google Map of Office */}
-          <div className="rounded-2xl overflow-hidden border border-[#2A2D35] bg-[#181A1F] h-64 relative">
-            <APIProvider apiKey={apiKey}>
-              <Map
-                mapId="DEMO_MAP_ID"
-                defaultCenter={OFFICE_COORDINATES}
-                defaultZoom={15}
-                gestureHandling="cooperative"
-                internalUsageAttributionIds={['gmp_mcp_codeassist_v1_aistudio']}
-                style={{ width: '100%', height: '100%' }}
-              >
-                <AdvancedMarker position={OFFICE_COORDINATES} title="Vantage Luxury Realty — Maitama Office">
-                  <div className="bg-[#C5A880] text-[#121316] font-bold px-3 py-1.5 rounded-lg text-xs shadow-xl flex items-center gap-1.5 border border-white">
-                    <MapPin className="w-4 h-4" />
-                    <span>Vantage Office · Maitama</span>
-                  </div>
-                </AdvancedMarker>
-              </Map>
-            </APIProvider>
+          {/* Architectural Location & Access Card */}
+          <div className="rounded-2xl border border-[#2A2D35] bg-[#14161A] p-5 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Compass className="w-4 h-4 text-[#C5A880]" />
+                <span className="text-xs uppercase tracking-wider text-white font-semibold">Ministers' Hill Access Guide</span>
+              </div>
+              <span className="font-mono text-[11px] text-[#A0A4B0]">9.0912° N, 7.4948° E</span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="p-3 rounded-xl bg-[#181A1F] border border-[#252830]">
+                <span className="text-[#8E929F] block text-[10px] uppercase">From Transcorp Hilton</span>
+                <span className="text-white font-semibold">3 Minutes Drive</span>
+              </div>
+              <div className="p-3 rounded-xl bg-[#181A1F] border border-[#252830]">
+                <span className="text-[#8E929F] block text-[10px] uppercase">From IBB Golf Club</span>
+                <span className="text-white font-semibold">5 Minutes Drive</span>
+              </div>
+              <div className="p-3 rounded-xl bg-[#181A1F] border border-[#252830]">
+                <span className="text-[#8E929F] block text-[10px] uppercase">Diplomatic Zone Axis</span>
+                <span className="text-white font-semibold">Amazon & Mississippi St</span>
+              </div>
+              <div className="p-3 rounded-xl bg-[#181A1F] border border-[#252830]">
+                <span className="text-[#8E929F] block text-[10px] uppercase">Security Protocol</span>
+                <span className="text-emerald-400 font-semibold">Armed Patrol Corridor</span>
+              </div>
+            </div>
+
+            <p className="text-[11px] text-[#A0A4B0] leading-relaxed pt-1">
+              Private client consultations and physical file reviews require advance registration with our security desk.
+            </p>
           </div>
         </div>
 
