@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Property, formatNaira, ASSET_IMAGES } from '../data/properties';
+import { motion } from 'motion/react';
+import { Property, formatNaira, ASSET_IMAGES, ASSET_VIDEOS } from '../data/properties';
 import {
   ShieldCheck,
   Building2,
@@ -9,16 +10,13 @@ import {
   Clock,
   MessageSquare,
   CheckCircle2,
-  Calendar,
   Send,
   Lock,
-  ArrowRight,
   Award,
   Users2,
   Briefcase,
   TrendingUp,
-  Compass,
-  Navigation
+  Compass
 } from 'lucide-react';
 
 interface AboutContactPageProps {
@@ -26,12 +24,8 @@ interface AboutContactPageProps {
   onOpenConsultation: () => void;
 }
 
-// Vantage Realty Maitama Office Coordinates
-const OFFICE_COORDINATES = { lat: 9.0912, lng: 7.4948 };
-
 export const AboutContactPage: React.FC<AboutContactPageProps> = ({
-  properties,
-  onOpenConsultation
+  properties
 }) => {
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
@@ -58,42 +52,60 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-24">
-      
       {/* HERO SECTION */}
-      <section className="relative rounded-3xl overflow-hidden border border-[#252830] bg-[#181A1F] p-8 sm:p-16 lg:p-20 text-center space-y-6">
-        <div className="absolute inset-0 bg-radial from-[#C5A880]/10 via-transparent to-transparent pointer-events-none" />
+      <section className="relative rounded-3xl overflow-hidden glass-card p-8 sm:p-16 lg:p-20 text-center space-y-6">
+        <div className="absolute inset-0 bg-radial from-[#C5A880]/15 via-transparent to-transparent pointer-events-none" />
 
-        <div className="max-w-3xl mx-auto space-y-4">
-          <span className="text-xs uppercase tracking-widest text-[#C5A880] font-semibold">
+        <div className="max-w-3xl mx-auto space-y-4 relative z-10">
+          <motion.span
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            className="text-xs uppercase tracking-widest text-[#C5A880] font-semibold block"
+          >
             Vantage Luxury Realty · Corporate Profile
-          </span>
-          <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold text-[#F4F0E8] leading-tight text-balance">
-            PROPERTY IS MORE THAN AN ADDRESS. <br />
-            <span className="italic font-normal text-[#C5A880]">IT'S A STATEMENT.</span>
+          </motion.span>
+          <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold text-[#F4F0E8] leading-tight text-balance pb-1">
+            <motion.span
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="block"
+            >
+              PROPERTY IS MORE THAN AN ADDRESS.
+            </motion.span>
+            <motion.span
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+              className="block italic font-normal text-[#C5A880]"
+            >
+              IT'S A STATEMENT.
+            </motion.span>
           </h1>
-          <p className="text-sm sm:text-lg text-[#A0A4B0] max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-lg text-[#C0C4D0] max-w-2xl mx-auto leading-relaxed">
             Representing high-net-worth individuals, diplomatic missions, and institutional family offices in the acquisition of Abuja’s most distinguished residential assets.
           </p>
         </div>
 
         {/* Corporate Trust Badges */}
-        <div className="pt-6 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto text-xs text-[#E8E3D9]">
-          <div className="p-4 rounded-xl bg-[#121316] border border-[#252830]">
+        <div className="pt-6 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto text-xs text-[#E8E3D9] relative z-10">
+          <div className="p-4 rounded-xl glass-panel">
             <Award className="w-5 h-5 text-[#C5A880] mx-auto mb-2" />
             <span className="font-semibold block text-white">Maitama & Asokoro Focus</span>
             <span className="text-[11px] text-[#8E929F]">Sovereign residential core</span>
           </div>
-          <div className="p-4 rounded-xl bg-[#121316] border border-[#252830]">
+          <div className="p-4 rounded-xl glass-panel">
             <Lock className="w-5 h-5 text-[#C5A880] mx-auto mb-2" />
             <span className="font-semibold block text-white">Confidential Mandates</span>
             <span className="text-[11px] text-[#8E929F]">Discreet off-market access</span>
           </div>
-          <div className="p-4 rounded-xl bg-[#121316] border border-[#252830]">
+          <div className="p-4 rounded-xl glass-panel">
             <ShieldCheck className="w-5 h-5 text-[#C5A880] mx-auto mb-2" />
             <span className="font-semibold block text-white">Verified Title Due Diligence</span>
             <span className="text-[11px] text-[#8E929F]">AGIS & FCDA authenticated</span>
           </div>
-          <div className="p-4 rounded-xl bg-[#121316] border border-[#252830]">
+          <div className="p-4 rounded-xl glass-panel">
             <Users2 className="w-5 h-5 text-[#C5A880] mx-auto mb-2" />
             <span className="font-semibold block text-white">Private Client Associates</span>
             <span className="text-[11px] text-[#8E929F]">Dedicated partner representation</span>
@@ -122,14 +134,14 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
-            <div className="p-5 rounded-2xl bg-[#181A1F] border border-[#252830] space-y-2">
+            <div className="p-5 rounded-2xl glass-card space-y-2">
               <span className="text-xs font-semibold text-[#C5A880] uppercase tracking-wider block">Our Mission</span>
               <p className="text-xs text-[#A0A4B0] leading-relaxed">
                 To provide high-net-worth investors and diplomatic entities with uncompromising advisory, total discretion, and verified access to Abuja’s finest residential real estate.
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-[#181A1F] border border-[#252830] space-y-2">
+            <div className="p-5 rounded-2xl glass-card space-y-2">
               <span className="text-xs font-semibold text-[#C5A880] uppercase tracking-wider block">Our Vision</span>
               <p className="text-xs text-[#A0A4B0] leading-relaxed">
                 To be West Africa's benchmark luxury real estate brokerage, setting international standards for fiduciary integrity, architectural curation, and private client service.
@@ -139,27 +151,23 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
         </div>
 
         <div className="lg:col-span-6">
-          <div className="relative rounded-3xl overflow-hidden border border-[#2A2D35] bg-[#181A1F] shadow-2xl">
-            <img
-              src={ASSET_IMAGES.maitama}
-              alt="Vantage Maitama Architectural Residence"
-              referrerPolicy="no-referrer"
-              onError={(e) => {
-                const target = e.currentTarget;
-                if (!target.dataset.fallback) {
-                  target.dataset.fallback = 'true';
-                  target.src = '/images/maitama_duplex_residence_1794063270579.jpg';
-                }
-              }}
-              className="w-full h-[450px] object-cover"
+          <div className="relative rounded-3xl overflow-hidden glass-card shadow-2xl h-[450px]">
+            <video
+              src={ASSET_VIDEOS.maitama}
+              poster={ASSET_IMAGES.maitama}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#121316] via-transparent to-transparent" />
-            <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-[#121316]/90 backdrop-blur-md border border-[#2A2D35] text-xs">
+            <div className="absolute inset-0 bg-gradient-to-t from-[#121316] via-transparent to-transparent pointer-events-none" />
+            <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl glass-panel text-xs">
               <div className="flex items-center gap-2 text-[#C5A880] font-semibold">
                 <Building2 className="w-4 h-4" />
                 <span>Prime Maitama Ministers' Hill Axis</span>
               </div>
-              <p className="text-[#A0A4B0] mt-1 text-[11px]">
+              <p className="text-[#C0C4D0] mt-1 text-[11px]">
                 Advising on transactions from ₦450 Million detached duplexes to ₦3.0 Billion ambassadorial compounds.
               </p>
             </div>
@@ -182,17 +190,16 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          
           {/* Service 1 */}
-          <div className="p-6 rounded-2xl bg-[#181A1F] border border-[#252830] hover:border-[#C5A880]/50 transition-all space-y-4">
-            <div className="w-12 h-12 rounded-xl bg-[#C5A880]/10 border border-[#C5A880]/30 flex items-center justify-center text-[#C5A880]">
+          <div className="p-6 rounded-2xl glass-card hover:border-[#C5A880]/50 transition-all space-y-4">
+            <div className="w-12 h-12 rounded-xl bg-[#C5A880]/15 border border-[#C5A880]/30 flex items-center justify-center text-[#C5A880]">
               <Briefcase className="w-6 h-6" />
             </div>
             <h3 className="font-serif text-lg font-bold text-white">Property Acquisition Advisory</h3>
             <p className="text-xs text-[#A0A4B0] leading-relaxed">
               Bespoke buyer representation. We curate properties matching strict architectural, security, and location criteria, conducting exhaustive title searches before submission.
             </p>
-            <ul className="text-xs text-[#E8E3D9] space-y-1.5 pt-2 border-t border-[#252830]">
+            <ul className="text-xs text-[#E8E3D9] space-y-1.5 pt-2 border-t border-white/15">
               <li className="flex items-center gap-1.5">
                 <span className="w-1 h-1 rounded-full bg-[#C5A880]" />
                 <span>Off-market portfolio sourcing</span>
@@ -209,15 +216,15 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
           </div>
 
           {/* Service 2 */}
-          <div className="p-6 rounded-2xl bg-[#181A1F] border border-[#252830] hover:border-[#C5A880]/50 transition-all space-y-4">
-            <div className="w-12 h-12 rounded-xl bg-[#C5A880]/10 border border-[#C5A880]/30 flex items-center justify-center text-[#C5A880]">
+          <div className="p-6 rounded-2xl glass-card hover:border-[#C5A880]/50 transition-all space-y-4">
+            <div className="w-12 h-12 rounded-xl bg-[#C5A880]/15 border border-[#C5A880]/30 flex items-center justify-center text-[#C5A880]">
               <Building2 className="w-6 h-6" />
             </div>
             <h3 className="font-serif text-lg font-bold text-white">Luxury Residential Sales</h3>
             <p className="text-xs text-[#A0A4B0] leading-relaxed">
               Targeted representation for verified sellers and estate owners in Maitama, Asokoro, and Guzape, reaching qualified domestic and international buyers.
             </p>
-            <ul className="text-xs text-[#E8E3D9] space-y-1.5 pt-2 border-t border-[#252830]">
+            <ul className="text-xs text-[#E8E3D9] space-y-1.5 pt-2 border-t border-white/15">
               <li className="flex items-center gap-1.5">
                 <span className="w-1 h-1 rounded-full bg-[#C5A880]" />
                 <span>Architectural photography & media</span>
@@ -234,15 +241,15 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
           </div>
 
           {/* Service 3 */}
-          <div className="p-6 rounded-2xl bg-[#181A1F] border border-[#252830] hover:border-[#C5A880]/50 transition-all space-y-4">
-            <div className="w-12 h-12 rounded-xl bg-[#C5A880]/10 border border-[#C5A880]/30 flex items-center justify-center text-[#C5A880]">
+          <div className="p-6 rounded-2xl glass-card hover:border-[#C5A880]/50 transition-all space-y-4">
+            <div className="w-12 h-12 rounded-xl bg-[#C5A880]/15 border border-[#C5A880]/30 flex items-center justify-center text-[#C5A880]">
               <TrendingUp className="w-6 h-6" />
             </div>
             <h3 className="font-serif text-lg font-bold text-white">Investment Consultation</h3>
             <p className="text-xs text-[#A0A4B0] leading-relaxed">
               Structuring real estate holdings for wealth preservation, hedge against currency devaluation, and diplomatic lease income optimization.
             </p>
-            <ul className="text-xs text-[#E8E3D9] space-y-1.5 pt-2 border-t border-[#252830]">
+            <ul className="text-xs text-[#E8E3D9] space-y-1.5 pt-2 border-t border-white/15">
               <li className="flex items-center gap-1.5">
                 <span className="w-1 h-1 rounded-full bg-[#C5A880]" />
                 <span>Yield modeling & lease forecasting</span>
@@ -259,15 +266,15 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
           </div>
 
           {/* Service 4 */}
-          <div className="p-6 rounded-2xl bg-[#181A1F] border border-[#252830] hover:border-[#C5A880]/50 transition-all space-y-4">
-            <div className="w-12 h-12 rounded-xl bg-[#C5A880]/10 border border-[#C5A880]/30 flex items-center justify-center text-[#C5A880]">
+          <div className="p-6 rounded-2xl glass-card hover:border-[#C5A880]/50 transition-all space-y-4">
+            <div className="w-12 h-12 rounded-xl bg-[#C5A880]/15 border border-[#C5A880]/30 flex items-center justify-center text-[#C5A880]">
               <Lock className="w-6 h-6" />
             </div>
             <h3 className="font-serif text-lg font-bold text-white">Private Property Inspections</h3>
             <p className="text-xs text-[#A0A4B0] leading-relaxed">
               Unaccompanied or chauffeured estate viewings conducted under strict NDA. Designed for public officials, corporate chairs, and foreign dignitaries.
             </p>
-            <ul className="text-xs text-[#E8E3D9] space-y-1.5 pt-2 border-t border-[#252830]">
+            <ul className="text-xs text-[#E8E3D9] space-y-1.5 pt-2 border-t border-white/15">
               <li className="flex items-center gap-1.5">
                 <span className="w-1 h-1 rounded-full bg-[#C5A880]" />
                 <span>Non-disclosure compliance</span>
@@ -282,14 +289,12 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
               </li>
             </ul>
           </div>
-
         </div>
       </section>
 
       {/* INTERACTIVE CONTACT FORM & HEADQUARTERS DETAILS */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-        
-        {/* Contact Details & Google Map Pin (5 cols) */}
+        {/* Contact Details & Access Guide (5 cols) */}
         <div className="lg:col-span-5 space-y-6">
           <div className="space-y-2">
             <span className="text-xs uppercase tracking-widest text-[#C5A880] font-semibold">
@@ -304,7 +309,7 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
           </div>
 
           {/* Contact Details Card */}
-          <div className="bg-[#181A1F] rounded-2xl border border-[#252830] p-6 space-y-4 text-xs">
+          <div className="glass-card rounded-2xl p-6 space-y-4 text-xs">
             <div className="flex items-start gap-3.5">
               <MapPin className="w-5 h-5 text-[#C5A880] shrink-0 mt-0.5" />
               <div>
@@ -315,7 +320,7 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
               </div>
             </div>
 
-            <div className="flex items-start gap-3.5 pt-3 border-t border-[#252830]">
+            <div className="flex items-start gap-3.5 pt-3 border-t border-white/15">
               <Phone className="w-5 h-5 text-[#C5A880] shrink-0 mt-0.5" />
               <div>
                 <span className="font-semibold text-white block">Direct Private Client Lines:</span>
@@ -328,7 +333,7 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
               </div>
             </div>
 
-            <div className="flex items-start gap-3.5 pt-3 border-t border-[#252830]">
+            <div className="flex items-start gap-3.5 pt-3 border-t border-white/15">
               <Mail className="w-5 h-5 text-[#C5A880] shrink-0 mt-0.5" />
               <div>
                 <span className="font-semibold text-white block">Confidential Inquiries:</span>
@@ -339,7 +344,7 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
               </div>
             </div>
 
-            <div className="flex items-start gap-3.5 pt-3 border-t border-[#252830]">
+            <div className="flex items-start gap-3.5 pt-3 border-t border-white/15">
               <Clock className="w-5 h-5 text-[#C5A880] shrink-0 mt-0.5" />
               <div>
                 <span className="font-semibold text-white block">Advisory Hours:</span>
@@ -354,7 +359,7 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
                 href={whatsAppDirectUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-3 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-semibold flex items-center justify-center gap-2 transition-all shadow-md shadow-[#25D366]/20"
+                className="w-full py-3 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-semibold flex items-center justify-center gap-2 transition-all border border-white/20 shadow-lg shadow-[#25D366]/20"
               >
                 <MessageSquare className="w-4 h-4" />
                 <span>Chat on WhatsApp (+234 809 500 8000)</span>
@@ -363,7 +368,7 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
           </div>
 
           {/* Architectural Location & Access Card */}
-          <div className="rounded-2xl border border-[#2A2D35] bg-[#14161A] p-5 space-y-4">
+          <div className="rounded-2xl glass-panel p-5 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Compass className="w-4 h-4 text-[#C5A880]" />
@@ -373,19 +378,19 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
             </div>
 
             <div className="grid grid-cols-2 gap-2 text-xs">
-              <div className="p-3 rounded-xl bg-[#181A1F] border border-[#252830]">
+              <div className="p-3 rounded-xl bg-white/[0.04] backdrop-blur-md border border-white/15">
                 <span className="text-[#8E929F] block text-[10px] uppercase">From Transcorp Hilton</span>
                 <span className="text-white font-semibold">3 Minutes Drive</span>
               </div>
-              <div className="p-3 rounded-xl bg-[#181A1F] border border-[#252830]">
+              <div className="p-3 rounded-xl bg-white/[0.04] backdrop-blur-md border border-white/15">
                 <span className="text-[#8E929F] block text-[10px] uppercase">From IBB Golf Club</span>
                 <span className="text-white font-semibold">5 Minutes Drive</span>
               </div>
-              <div className="p-3 rounded-xl bg-[#181A1F] border border-[#252830]">
+              <div className="p-3 rounded-xl bg-white/[0.04] backdrop-blur-md border border-white/15">
                 <span className="text-[#8E929F] block text-[10px] uppercase">Diplomatic Zone Axis</span>
                 <span className="text-white font-semibold">Amazon & Mississippi St</span>
               </div>
-              <div className="p-3 rounded-xl bg-[#181A1F] border border-[#252830]">
+              <div className="p-3 rounded-xl bg-white/[0.04] backdrop-blur-md border border-white/15">
                 <span className="text-[#8E929F] block text-[10px] uppercase">Security Protocol</span>
                 <span className="text-emerald-400 font-semibold">Armed Patrol Corridor</span>
               </div>
@@ -398,7 +403,7 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
         </div>
 
         {/* Working Comprehensive Contact Form (7 cols) */}
-        <div className="lg:col-span-7 bg-[#181A1F] border border-[#2A2D35] rounded-3xl p-6 sm:p-10 shadow-2xl">
+        <div className="lg:col-span-7 glass-card rounded-3xl p-6 sm:p-10 shadow-2xl">
           
           <div className="mb-6">
             <span className="text-xs uppercase tracking-widest text-[#C5A880] font-semibold block">
@@ -421,14 +426,14 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
               <p className="text-sm text-[#A0A4B0] max-w-md mx-auto">
                 Thank you, <strong className="text-white">{fullName}</strong>. Your consultation file has been assigned under reference <span className="font-mono text-[#C5A880] font-semibold">{ticketRef}</span>.
               </p>
-              <div className="p-4 bg-[#121316] rounded-xl border border-[#252830] text-xs max-w-sm mx-auto text-left space-y-1">
+              <div className="p-4 bg-[#121316]/75 backdrop-blur-md rounded-xl border border-white/15 text-xs max-w-sm mx-auto text-left space-y-1">
                 <div><span className="text-[#8E929F]">Budget Bracket:</span> <span className="text-white font-medium">{budget}</span></div>
                 <div><span className="text-[#8E929F]">Property Focus:</span> <span className="text-white font-medium">{propertyOfInterest || 'Full Portfolio'}</span></div>
                 <div><span className="text-[#8E929F]">Preferred Date:</span> <span className="text-white font-medium">{inspectionDate || 'Earliest slot'}</span></div>
               </div>
               <button
                 onClick={() => setSubmitted(false)}
-                className="mt-4 px-6 py-2.5 rounded-xl bg-[#242832] text-xs font-semibold text-white hover:bg-[#2F3442]"
+                className="mt-4 px-6 py-2.5 rounded-xl glass-btn text-xs font-semibold text-white transition-all"
               >
                 Submit Another Request
               </button>
@@ -444,7 +449,7 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="e.g. Senator / Dr. / Alhaji / Mr. ..."
-                  className="w-full px-4 py-2.5 bg-[#121316] border border-[#2A2D35] rounded-xl text-white placeholder-[#5E6370] focus:outline-none focus:border-[#C5A880]"
+                  className="w-full px-4 py-2.5 bg-[#121316]/75 backdrop-blur-md border border-white/15 rounded-xl text-white placeholder-[#5E6370] focus:outline-none focus:border-[#C5A880]"
                 />
               </div>
 
@@ -457,7 +462,7 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="+234 803 000 0000"
-                    className="w-full px-4 py-2.5 bg-[#121316] border border-[#2A2D35] rounded-xl text-white placeholder-[#5E6370] focus:outline-none focus:border-[#C5A880]"
+                    className="w-full px-4 py-2.5 bg-[#121316]/75 backdrop-blur-md border border-white/15 rounded-xl text-white placeholder-[#5E6370] focus:outline-none focus:border-[#C5A880]"
                   />
                 </div>
 
@@ -469,7 +474,7 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@organization.com"
-                    className="w-full px-4 py-2.5 bg-[#121316] border border-[#2A2D35] rounded-xl text-white placeholder-[#5E6370] focus:outline-none focus:border-[#C5A880]"
+                    className="w-full px-4 py-2.5 bg-[#121316]/75 backdrop-blur-md border border-white/15 rounded-xl text-white placeholder-[#5E6370] focus:outline-none focus:border-[#C5A880]"
                   />
                 </div>
               </div>
@@ -480,7 +485,7 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
                   <select
                     value={propertyOfInterest}
                     onChange={(e) => setPropertyOfInterest(e.target.value)}
-                    className="w-full px-3 py-2.5 bg-[#121316] border border-[#2A2D35] rounded-xl text-white focus:outline-none focus:border-[#C5A880]"
+                    className="w-full px-3 py-2.5 bg-[#121316]/75 backdrop-blur-md border border-white/15 rounded-xl text-white focus:outline-none focus:border-[#C5A880]"
                   >
                     <option value="">General Abuja Acquisition</option>
                     {properties.map((p) => (
@@ -496,7 +501,7 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
                   <select
                     value={budget}
                     onChange={(e) => setBudget(e.target.value)}
-                    className="w-full px-3 py-2.5 bg-[#121316] border border-[#2A2D35] rounded-xl text-white focus:outline-none focus:border-[#C5A880]"
+                    className="w-full px-3 py-2.5 bg-[#121316]/75 backdrop-blur-md border border-white/15 rounded-xl text-white focus:outline-none focus:border-[#C5A880]"
                   >
                     <option value="₦400M - ₦600M">₦400M – ₦600 Million</option>
                     <option value="₦600M - ₦1.2B">₦600M – ₦1.2 Billion</option>
@@ -512,7 +517,7 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
                   type="date"
                   value={inspectionDate}
                   onChange={(e) => setInspectionDate(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-[#121316] border border-[#2A2D35] rounded-xl text-white focus:outline-none focus:border-[#C5A880]"
+                  className="w-full px-4 py-2.5 bg-[#121316]/75 backdrop-blur-md border border-white/15 rounded-xl text-white focus:outline-none focus:border-[#C5A880]"
                 />
               </div>
 
@@ -523,14 +528,14 @@ export const AboutContactPage: React.FC<AboutContactPageProps> = ({
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder="Specify particular requirements such as swimming pool, elevator, security outpost, land size, or diplomatic lease targets..."
-                  className="w-full px-4 py-2.5 bg-[#121316] border border-[#2A2D35] rounded-xl text-white placeholder-[#5E6370] focus:outline-none focus:border-[#C5A880]"
+                  className="w-full px-4 py-2.5 bg-[#121316]/75 backdrop-blur-md border border-white/15 rounded-xl text-white placeholder-[#5E6370] focus:outline-none focus:border-[#C5A880]"
                 />
               </div>
 
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full py-3.5 px-6 rounded-xl bg-[#C5A880] hover:bg-[#D4AF37] text-[#121316] font-semibold text-sm transition-all shadow-lg shadow-[#C5A880]/15 flex items-center justify-center gap-2"
+                  className="w-full py-3.5 px-6 rounded-xl bg-[#C5A880] hover:bg-[#D4AF37] text-[#121316] font-semibold text-sm transition-all glass-btn-gold flex items-center justify-center gap-2"
                 >
                   <Send className="w-4 h-4" />
                   <span>Transmit Advisory Request</span>

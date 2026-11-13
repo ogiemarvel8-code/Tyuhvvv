@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
 import { Property, formatNaira } from '../data/properties';
-import { X, Calendar, ShieldCheck, CheckCircle2, Phone, Mail, User, Clock, Building, ArrowRight } from 'lucide-react';
+import { X, Calendar, ShieldCheck, CheckCircle2, Phone, Mail, User, Clock, ArrowRight } from 'lucide-react';
 
 interface InspectionModalProps {
   isOpen: boolean;
@@ -56,10 +57,14 @@ export const InspectionModal: React.FC<InspectionModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto bg-black/85 backdrop-blur-md">
       <div className="fixed inset-0" onClick={handleResetAndClose} />
 
-      <div className="relative w-full max-w-xl bg-[#181A1F] border border-[#2A2D35] rounded-3xl shadow-2xl z-10 text-[#F4F0E8] overflow-hidden">
-        
+      <motion.div
+        initial={{ opacity: 0, y: 18, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+        className="relative w-full max-w-xl max-h-[92vh] overflow-y-auto my-auto glass-panel rounded-3xl shadow-2xl z-10 text-[#F4F0E8]"
+      >
         {/* Modal Header */}
-        <div className="bg-[#121316] border-b border-[#252830] px-6 py-5 flex items-center justify-between">
+        <div className="sticky top-0 z-20 bg-[#121316]/85 backdrop-blur-xl border-b border-white/15 px-6 py-5 flex items-center justify-between">
           <div>
             <span className="text-[10px] uppercase tracking-widest text-[#C5A880] font-semibold">
               Vantage Private Client Division
@@ -70,8 +75,10 @@ export const InspectionModal: React.FC<InspectionModalProps> = ({
           </div>
 
           <button
+            type="button"
             onClick={handleResetAndClose}
-            className="p-2 text-[#A0A4B0] hover:text-white rounded-full hover:bg-[#252830] transition-colors"
+            aria-label="Close modal"
+            className="p-2 text-[#A0A4B0] hover:text-white rounded-full hover:bg-white/10 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -90,7 +97,7 @@ export const InspectionModal: React.FC<InspectionModalProps> = ({
               </p>
             </div>
 
-            <div className="bg-[#121316] p-4 rounded-xl border border-[#252830] text-xs space-y-1.5 max-w-md mx-auto text-left">
+            <div className="bg-white/[0.04] backdrop-blur-md p-4 rounded-xl border border-white/15 text-xs space-y-1.5 max-w-md mx-auto text-left">
               <div className="flex justify-between">
                 <span className="text-[#A0A4B0]">Reference Code:</span>
                 <span className="font-mono text-[#C5A880] font-semibold">{bookingReference}</span>
@@ -111,8 +118,9 @@ export const InspectionModal: React.FC<InspectionModalProps> = ({
 
             <div className="pt-3">
               <button
+                type="button"
                 onClick={handleResetAndClose}
-                className="w-full py-3 rounded-xl bg-[#C5A880] text-[#121316] font-semibold text-sm hover:bg-[#D4AF37] transition-all"
+                className="w-full py-3 rounded-xl bg-[#C5A880] text-[#121316] font-semibold text-sm hover:bg-[#D4AF37] transition-all glass-btn-gold"
               >
                 Done
               </button>
@@ -123,13 +131,13 @@ export const InspectionModal: React.FC<InspectionModalProps> = ({
             
             {/* Property Target Indicator */}
             {property && (
-              <div className="p-3 bg-[#121316] rounded-xl border border-[#2A2D35] flex items-center justify-between">
+              <div className="p-3 bg-[#121316]/75 backdrop-blur-md rounded-xl border border-white/15 flex items-center justify-between">
                 <div>
                   <span className="text-[10px] uppercase text-[#A0A4B0] block">Target Listing</span>
                   <span className="font-serif text-sm font-semibold text-[#F4F0E8]">{property.title}</span>
                   <span className="text-[11px] text-[#C5A880] block">{property.locationDetail} · {formatNaira(property.priceNaira)}</span>
                 </div>
-                <span className="font-mono text-xs px-2 py-1 rounded bg-[#242832] text-[#A0A4B0]">{property.code}</span>
+                <span className="font-mono text-xs px-2 py-1 rounded bg-white/5 border border-white/15 text-[#A0A4B0]">{property.code}</span>
               </div>
             )}
 
@@ -145,7 +153,7 @@ export const InspectionModal: React.FC<InspectionModalProps> = ({
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="e.g. Chief Dr. Aminu Bello / Ambassador..."
-                    className="w-full pl-9 pr-4 py-2.5 bg-[#121316] border border-[#2A2D35] rounded-xl text-white placeholder-[#5E6370] focus:outline-none focus:border-[#C5A880]"
+                    className="w-full pl-9 pr-4 py-2.5 bg-[#121316]/75 backdrop-blur-md border border-white/15 rounded-xl text-white placeholder-[#5E6370] focus:outline-none focus:border-[#C5A880]"
                   />
                 </div>
               </div>
@@ -161,7 +169,7 @@ export const InspectionModal: React.FC<InspectionModalProps> = ({
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="+234 800 000 0000"
-                      className="w-full pl-9 pr-4 py-2.5 bg-[#121316] border border-[#2A2D35] rounded-xl text-white placeholder-[#5E6370] focus:outline-none focus:border-[#C5A880]"
+                      className="w-full pl-9 pr-4 py-2.5 bg-[#121316]/75 backdrop-blur-md border border-white/15 rounded-xl text-white placeholder-[#5E6370] focus:outline-none focus:border-[#C5A880]"
                     />
                   </div>
                 </div>
@@ -176,7 +184,7 @@ export const InspectionModal: React.FC<InspectionModalProps> = ({
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="client@enterprise.com"
-                      className="w-full pl-9 pr-4 py-2.5 bg-[#121316] border border-[#2A2D35] rounded-xl text-white placeholder-[#5E6370] focus:outline-none focus:border-[#C5A880]"
+                      className="w-full pl-9 pr-4 py-2.5 bg-[#121316]/75 backdrop-blur-md border border-white/15 rounded-xl text-white placeholder-[#5E6370] focus:outline-none focus:border-[#C5A880]"
                     />
                   </div>
                 </div>
@@ -188,7 +196,7 @@ export const InspectionModal: React.FC<InspectionModalProps> = ({
                   <select
                     value={selectedPropertyCode}
                     onChange={(e) => setSelectedPropertyCode(e.target.value)}
-                    className="w-full px-3 py-2.5 bg-[#121316] border border-[#2A2D35] rounded-xl text-white focus:outline-none focus:border-[#C5A880]"
+                    className="w-full px-3 py-2.5 bg-[#121316]/75 backdrop-blur-md border border-white/15 rounded-xl text-white focus:outline-none focus:border-[#C5A880]"
                   >
                     <option value="">General Portfolio Exploration</option>
                     {propertiesList.map((p) => (
@@ -204,7 +212,7 @@ export const InspectionModal: React.FC<InspectionModalProps> = ({
                   <select
                     value={budget}
                     onChange={(e) => setBudget(e.target.value)}
-                    className="w-full px-3 py-2.5 bg-[#121316] border border-[#2A2D35] rounded-xl text-white focus:outline-none focus:border-[#C5A880]"
+                    className="w-full px-3 py-2.5 bg-[#121316]/75 backdrop-blur-md border border-white/15 rounded-xl text-white focus:outline-none focus:border-[#C5A880]"
                   >
                     <option value="₦400M - ₦600M">₦400M - ₦600 Million</option>
                     <option value="₦600M - ₦1.2B">₦600M - ₦1.2 Billion</option>
@@ -223,7 +231,7 @@ export const InspectionModal: React.FC<InspectionModalProps> = ({
                       type="date"
                       value={preferredDate}
                       onChange={(e) => setPreferredDate(e.target.value)}
-                      className="w-full pl-9 pr-4 py-2.5 bg-[#121316] border border-[#2A2D35] rounded-xl text-white focus:outline-none focus:border-[#C5A880]"
+                      className="w-full pl-9 pr-4 py-2.5 bg-[#121316]/75 backdrop-blur-md border border-white/15 rounded-xl text-white focus:outline-none focus:border-[#C5A880]"
                     />
                   </div>
                 </div>
@@ -235,7 +243,7 @@ export const InspectionModal: React.FC<InspectionModalProps> = ({
                     <select
                       value={preferredTime}
                       onChange={(e) => setPreferredTime(e.target.value)}
-                      className="w-full pl-9 pr-4 py-2.5 bg-[#121316] border border-[#2A2D35] rounded-xl text-white focus:outline-none focus:border-[#C5A880]"
+                      className="w-full pl-9 pr-4 py-2.5 bg-[#121316]/75 backdrop-blur-md border border-white/15 rounded-xl text-white focus:outline-none focus:border-[#C5A880]"
                     >
                       <option>Morning (10:00 AM - 1:00 PM)</option>
                       <option>Afternoon (1:00 PM - 4:00 PM)</option>
@@ -275,15 +283,15 @@ export const InspectionModal: React.FC<InspectionModalProps> = ({
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="e.g. Inquiring regarding payment terms, legal title documentation verification (C of O), or off-market options..."
-                  className="w-full px-4 py-2.5 bg-[#121316] border border-[#2A2D35] rounded-xl text-white placeholder-[#5E6370] focus:outline-none focus:border-[#C5A880]"
+                  className="w-full px-4 py-2.5 bg-[#121316]/75 backdrop-blur-md border border-white/15 rounded-xl text-white placeholder-[#5E6370] focus:outline-none focus:border-[#C5A880]"
                 />
               </div>
             </div>
 
-            <div className="pt-4 border-t border-[#252830]">
+            <div className="pt-4 border-t border-white/15">
               <button
                 type="submit"
-                className="w-full py-3.5 px-6 rounded-xl bg-[#C5A880] hover:bg-[#D4AF37] text-[#121316] font-semibold text-sm transition-all shadow-lg shadow-[#C5A880]/15 flex items-center justify-center gap-2"
+                className="w-full py-3.5 px-6 rounded-xl bg-[#C5A880] hover:bg-[#D4AF37] text-[#121316] font-semibold text-sm transition-all glass-btn-gold flex items-center justify-center gap-2"
               >
                 <span>Submit Confidential Request</span>
                 <ArrowRight className="w-4 h-4" />
@@ -295,7 +303,7 @@ export const InspectionModal: React.FC<InspectionModalProps> = ({
             </div>
           </form>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 };

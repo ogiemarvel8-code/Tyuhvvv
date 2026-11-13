@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import { Property, formatNaira, formatUSD } from '../data/properties';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
+import { Property, formatNaira, formatUSD, ASSET_IMAGES } from '../data/properties';
+import { ImageSlider } from './ImageSlider';
 import {
   X,
   MapPin,
@@ -7,16 +9,14 @@ import {
   Bath,
   Car,
   Maximize2,
-  Calendar,
   ShieldCheck,
   CheckCircle2,
   MessageSquare,
   PhoneCall,
-  ExternalLink,
-  ChevronLeft,
-  ChevronRight,
   TrendingUp,
-  FileCheck
+  FileCheck,
+  Film,
+  Image as ImageIcon
 } from 'lucide-react';
 
 interface PropertyDetailModalProps {
@@ -35,6 +35,12 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
   onEnquire
 }) => {
   const [activeImageIdx, setActiveImageIdx] = useState(0);
+  const [mediaMode, setMediaMode] = useState<'photos' | 'video'>('photos');
+
+  useEffect(() => {
+    setActiveImageIdx(0);
+    setMediaMode('photos');
+  }, [property?.id]);
 
   if (!property) return null;
 
@@ -42,7 +48,6 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
     ? formatNaira(property.priceNaira)
     : formatUSD(property.priceNaira);
 
-  // WhatsApp enquiry URL with structured message
   const whatsAppMessage = encodeURIComponent(
     `Hello Vantage Luxury Realty, I am interested in inquiring about ${property.title} (${property.code}) in ${property.district}, Abuja. Asking price: ${formatNaira(property.priceNaira)}. Please provide availability status and arrange a private briefing.`
   );
@@ -50,92 +55,118 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto bg-black/80 backdrop-blur-md">
-      
       {/* Background click to close */}
       <div className="fixed inset-0" onClick={onClose} />
 
-      <div className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto bg-[#181A1F] border border-[#2A2D35] rounded-3xl shadow-2xl z-10 text-[#F4F0E8]">
-        
+      <motion.div
+        initial={{ opacity: 0, y: 20, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+        className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto my-auto glass-panel rounded-3xl shadow-2xl z-10 text-[#F4F0E8]"
+      >
         {/* Sticky top action bar */}
-        <div className="sticky top-0 z-20 bg-[#181A1F]/90 backdrop-blur-md border-b border-[#252830] px-6 py-4 flex items-center justify-between">
+        <div className="sticky top-0 z-30 bg-[#14161B]/85 backdrop-blur-xl border-b border-white/15 px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="font-mono text-xs text-[#A0A4B0]">{property.code}</span>
-            <span className="text-[#C5A880] text-xs">·</span>
+            <span className="font-mono text-xs text-[#C5A880]">{property.code}</span>
+            <span className="text-white/30 text-xs">·</span>
             <span className="text-xs text-[#E8E3D9] font-medium">{property.district}, Abuja</span>
           </div>
 
           <button
+            type="button"
             onClick={onClose}
-            className="p-2 text-[#A0A4B0] hover:text-white rounded-full hover:bg-[#252830] transition-colors"
+            aria-label="Close residence dossier"
+            className="p-2 text-[#A0A4B0] hover:text-white rounded-full glass-btn transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         <div className="p-6 sm:p-8 space-y-8">
-          
-          {/* Main Photo Gallery */}
+          {/* Main Gallery & Architectural Video Tour */}
           <div className="space-y-3">
-            <div className="relative h-72 sm:h-96 w-full rounded-2xl overflow-hidden bg-black">
-              <img
-                src={property.images[activeImageIdx]}
-                alt={property.title}
-                referrerPolicy="no-referrer"
-                onError={(e) => {
-                  const target = e.currentTarget;
-                  if (!target.dataset.fallback) {
-                    target.dataset.fallback = 'true';
-                    target.src = '/images/hero_abuja_luxury_villa_1794063269976.jpg';
-                  }
-                }}
-                className="w-full h-full object-cover"
-              />
-
-              {/* Prev / Next buttons if multiple */}
-              {property.images.length > 1 && (
-                <>
-                  <button
-                    onClick={() => setActiveImageIdx((prev) => (prev > 0 ? prev - 1 : property.images.length - 1))}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 text-white hover:bg-black/80 transition-colors"
-                  >
-                    <ChevronLeft className="w-5 h-5" />
-                  </button>
-                  <button
-                    onClick={() => setActiveImageIdx((prev) => (prev < property.images.length - 1 ? prev + 1 : 0))}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 text-white hover:bg-black/80 transition-colors"
-                  >
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                </>
+            <div className="relative h-72 sm:h-96 w-full rounded-2xl overflow-hidden bg-[#121316] border border-white/15 shadow-xl">
+              {mediaMode === 'video' ? (
+                <video
+                  key={property.videoUrl}
+                  src={property.videoUrl}
+                  poster={property.images[0] || ASSET_IMAGES.hero}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  controls
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <ImageSlider
+                  images={property.images}
+                  alt={property.title}
+                  currentIndex={activeImageIdx}
+                  onIndexChange={setActiveImageIdx}
+                  autoplay={true}
+                  autoplayInterval={5500}
+                  alwaysShowArrows={true}
+                  dotsBottomClass="bottom-4"
+                />
               )}
 
+              {/* Media Switcher Controls (Top Right Overlay) */}
+              <div className="absolute top-4 right-4 z-20 flex items-center gap-1 p-1 rounded-xl bg-[#121316]/80 backdrop-blur-xl border border-white/15 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setMediaMode('photos')}
+                  className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 font-medium transition-colors ${
+                    mediaMode === 'photos'
+                      ? 'bg-[#C5A880] text-[#121316]'
+                      : 'text-[#E8E3D9] hover:text-white'
+                  }`}
+                >
+                  <ImageIcon className="w-3.5 h-3.5" />
+                  <span>Photos</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMediaMode('video')}
+                  className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 font-medium transition-colors ${
+                    mediaMode === 'video'
+                      ? 'bg-[#C5A880] text-[#121316]'
+                      : 'text-[#E8E3D9] hover:text-white'
+                  }`}
+                >
+                  <Film className="w-3.5 h-3.5" />
+                  <span>Film Tour</span>
+                </button>
+              </div>
+
               {/* Status Overlay */}
-              <div className="absolute bottom-4 left-4 bg-[#121316]/85 backdrop-blur-md px-3 py-1.5 rounded-lg border border-[#2A2D35] text-xs flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-400" />
+              <div className="hidden sm:flex absolute bottom-4 left-4 z-20 glass-panel px-3 py-1.5 rounded-lg text-xs items-center gap-2 pointer-events-none">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#C5A880]" />
                 <span className="font-medium text-[#E8E3D9]">Advertised Resale Listing</span>
               </div>
             </div>
 
             {/* Thumbnails */}
-            {property.images.length > 1 && (
+            {mediaMode === 'photos' && property.images.length > 1 && (
               <div className="flex gap-3 overflow-x-auto pb-2">
                 {property.images.map((img, idx) => (
                   <button
+                    type="button"
                     key={idx}
                     onClick={() => setActiveImageIdx(idx)}
                     className={`relative w-24 h-16 rounded-xl overflow-hidden shrink-0 border-2 transition-all ${
-                      activeImageIdx === idx ? 'border-[#C5A880]' : 'border-transparent opacity-60 hover:opacity-100'
+                      activeImageIdx === idx ? 'border-[#C5A880] scale-[1.03]' : 'border-white/15 opacity-60 hover:opacity-100'
                     }`}
                   >
                     <img
                       src={img}
-                      alt="Thumbnail"
+                      alt={`${property.title} preview ${idx + 1}`}
                       referrerPolicy="no-referrer"
                       onError={(e) => {
                         const target = e.currentTarget;
                         if (!target.dataset.fallback) {
                           target.dataset.fallback = 'true';
-                          target.src = '/images/hero_abuja_luxury_villa_1794063269976.jpg';
+                          target.src = ASSET_IMAGES.hero;
                         }
                       }}
                       className="w-full h-full object-cover"
@@ -147,7 +178,7 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
           </div>
 
           {/* Title & Core Price Header */}
-          <div className="border-b border-[#252830] pb-6">
+          <div className="border-b border-white/15 pb-6">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 text-xs text-[#A0A4B0] mb-2">
@@ -166,12 +197,12 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
                 </p>
               </div>
 
-              <div className="bg-[#121316] p-4 rounded-2xl border border-[#2A2D35] min-w-[240px]">
-                <div className="text-[11px] uppercase tracking-wider text-[#A0A4B0]">Asking Price</div>
-                <div className="font-serif text-2xl sm:text-3xl font-bold text-[#C5A880]">
+              <div className="glass-champagne p-4 rounded-2xl min-w-[240px]">
+                <div className="text-[11px] uppercase tracking-wider text-[#C5A880]">Asking Price</div>
+                <div className="font-serif text-2xl sm:text-3xl font-bold text-white tabular-nums">
                   {currentPriceFormatted}
                 </div>
-                <div className="text-xs text-[#8E929F] mt-1 font-mono">
+                <div className="text-xs text-[#C0C4D0] mt-1 font-mono tabular-nums">
                   {currency === 'NGN' ? `~${formatUSD(property.priceNaira)} USD` : `${formatNaira(property.priceNaira)}`}
                 </div>
               </div>
@@ -179,7 +210,7 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
           </div>
 
           {/* Mandatory Resale Disclaimer & Source Attribution Box */}
-          <div className="bg-[#121316] border border-[#343946] p-4 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
+          <div className="bg-white/[0.04] backdrop-blur-md border border-white/15 p-4 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
             <div className="flex items-start gap-3">
               <FileCheck className="w-5 h-5 text-[#C5A880] shrink-0 mt-0.5" />
               <div>
@@ -200,7 +231,7 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
 
           {/* Quantitative Specifications Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="bg-[#121316] p-4 rounded-xl border border-[#252830]">
+            <div className="bg-white/[0.04] backdrop-blur-md p-4 rounded-xl border border-white/15">
               <div className="flex items-center gap-2 text-xs text-[#A0A4B0] mb-1">
                 <Bed className="w-4 h-4 text-[#C5A880]" />
                 <span>Bedrooms</span>
@@ -208,7 +239,7 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
               <div className="font-serif text-xl font-bold text-white">{property.bedrooms} Suites</div>
             </div>
 
-            <div className="bg-[#121316] p-4 rounded-xl border border-[#252830]">
+            <div className="bg-white/[0.04] backdrop-blur-md p-4 rounded-xl border border-white/15">
               <div className="flex items-center gap-2 text-xs text-[#A0A4B0] mb-1">
                 <Bath className="w-4 h-4 text-[#C5A880]" />
                 <span>Bathrooms</span>
@@ -216,7 +247,7 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
               <div className="font-serif text-xl font-bold text-white">{property.bathrooms} Baths</div>
             </div>
 
-            <div className="bg-[#121316] p-4 rounded-xl border border-[#252830]">
+            <div className="bg-white/[0.04] backdrop-blur-md p-4 rounded-xl border border-white/15">
               <div className="flex items-center gap-2 text-xs text-[#A0A4B0] mb-1">
                 <Car className="w-4 h-4 text-[#C5A880]" />
                 <span>Parking Bay</span>
@@ -224,7 +255,7 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
               <div className="font-serif text-xl font-bold text-white">{property.parkingSpaces} Vehicles</div>
             </div>
 
-            <div className="bg-[#121316] p-4 rounded-xl border border-[#252830]">
+            <div className="bg-white/[0.04] backdrop-blur-md p-4 rounded-xl border border-white/15">
               <div className="flex items-center gap-2 text-xs text-[#A0A4B0] mb-1">
                 <Maximize2 className="w-4 h-4 text-[#C5A880]" />
                 <span>Parcel & Built</span>
@@ -248,7 +279,7 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
             <h3 className="font-serif text-lg font-bold text-[#E8E3D9]">Verified Amenities & Specifications</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {property.amenities.map((item, idx) => (
-                <div key={idx} className="flex items-center gap-3 p-3 bg-[#121316] rounded-xl border border-[#252830] text-xs">
+                <div key={idx} className="flex items-center gap-3 p-3 bg-white/[0.04] backdrop-blur-md rounded-xl border border-white/15 text-xs">
                   <CheckCircle2 className="w-4 h-4 text-[#C5A880] shrink-0" />
                   <span className="text-[#E8E3D9]">{item}</span>
                 </div>
@@ -258,22 +289,22 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
 
           {/* Investment & Yield Profile (Advisory Metric) */}
           {property.investmentHighlights && (
-            <div className="bg-gradient-to-br from-[#121316] to-[#1C1F26] border border-[#C5A880]/30 p-6 rounded-2xl space-y-3">
+            <div className="glass-champagne p-6 rounded-2xl space-y-3">
               <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-[#C5A880] font-semibold">
                 <TrendingUp className="w-4 h-4" />
                 <span>Vantage Advisory · Capital & Lease Profile</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 text-xs">
                 <div>
-                  <span className="text-[#A0A4B0] block">Estimated Diplomatic Yield</span>
+                  <span className="text-[#C0C4D0] block">Estimated Diplomatic Yield</span>
                   <span className="font-serif text-base font-bold text-[#F4F0E8]">{property.investmentHighlights.rentalYield}</span>
                 </div>
                 <div>
-                  <span className="text-[#A0A4B0] block">Historical Capital Growth</span>
+                  <span className="text-[#C0C4D0] block">Historical Capital Growth</span>
                   <span className="font-serif text-base font-bold text-[#F4F0E8]">{property.investmentHighlights.capitalAppreciation}</span>
                 </div>
                 <div>
-                  <span className="text-[#A0A4B0] block">Primary Tenant Demographic</span>
+                  <span className="text-[#C0C4D0] block">Primary Tenant Demographic</span>
                   <span className="font-medium text-[#E8E3D9]">{property.investmentHighlights.targetTenant}</span>
                 </div>
               </div>
@@ -281,13 +312,14 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
           )}
 
           {/* Bottom Conversion CTA Strip */}
-          <div className="pt-4 border-t border-[#252830] flex flex-col sm:flex-row gap-3">
+          <div className="pt-4 border-t border-white/15 flex flex-col sm:flex-row gap-3">
             <button
+              type="button"
               onClick={() => {
                 onClose();
                 onRequestInspection(property);
               }}
-              className="flex-1 py-3.5 px-6 rounded-xl bg-[#C5A880] hover:bg-[#D4AF37] text-[#121316] font-semibold text-sm transition-all shadow-lg shadow-[#C5A880]/15 flex items-center justify-center gap-2"
+              className="flex-1 py-3.5 px-6 rounded-xl bg-[#C5A880] hover:bg-[#D4AF37] text-[#121316] font-semibold text-sm glass-btn-gold transition-all flex items-center justify-center gap-2"
             >
               <PhoneCall className="w-4 h-4" />
               <span>Book Private Inspection</span>
@@ -297,25 +329,27 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
               href={whatsAppUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 py-3.5 px-6 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-semibold text-sm transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/15"
+              className="flex-1 py-3.5 px-6 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-semibold text-sm border border-white/20 transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/15"
             >
               <MessageSquare className="w-4 h-4" />
               <span>Direct WhatsApp Enquiry</span>
             </a>
 
             <button
+              type="button"
               onClick={() => {
                 onClose();
                 onEnquire(property);
               }}
-              className="py-3.5 px-6 rounded-xl bg-[#242832] hover:bg-[#2F3442] text-white font-semibold text-sm border border-[#343946] transition-colors"
+              className="py-3.5 px-6 rounded-xl glass-btn text-white font-semibold text-sm transition-all"
             >
               General Enquiry
             </button>
           </div>
-
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
+
+

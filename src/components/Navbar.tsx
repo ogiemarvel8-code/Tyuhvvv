@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, PhoneCall, Compass, Shield, Building2 } from 'lucide-react';
+import { Menu, X, PhoneCall } from 'lucide-react';
 
 interface NavbarProps {
   currentPage: 'home' | 'collection' | 'about';
@@ -25,33 +25,29 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-[#121316]/95 backdrop-blur-md border-b border-[#252830] transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between gap-8 h-20">
-          
+    <header className="sticky top-2.5 sm:top-3 z-40 px-3 sm:px-6 lg:px-8 pointer-events-none">
+      <div className="max-w-7xl mx-auto glass-nav rounded-2xl px-4 sm:px-6 pointer-events-auto transition-all">
+        <div className="flex items-center justify-between gap-8 h-16 sm:h-[72px]">
           {/* Zone 1: Single text element wordmark */}
           <button
+            type="button"
             onClick={() => handleNavClick('home')}
             className="flex items-center gap-3 text-left focus:outline-none group whitespace-nowrap shrink-0"
           >
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#D4AF37] to-[#8C6D3F] p-[1px] flex items-center justify-center">
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#D4AF37] to-[#8C6D3F] p-[1px] flex items-center justify-center shrink-0">
               <div className="w-full h-full bg-[#121316] rounded-[7px] flex items-center justify-center">
                 <span className="font-serif text-lg font-bold text-[#C5A880] group-hover:scale-105 transition-transform">V</span>
               </div>
             </div>
-            <div>
-              <span className="font-serif text-lg md:text-xl font-bold tracking-[0.18em] text-[#F4F0E8] uppercase">
-                VANTAGE
-              </span>
-              <span className="block text-[9px] uppercase tracking-[0.3em] text-[#C5A880] font-sans font-medium -mt-0.5">
-                Luxury Realty · Abuja
-              </span>
-            </div>
+            <span className="font-serif text-lg md:text-xl font-bold tracking-[0.18em] text-[#F4F0E8] uppercase">
+              VANTAGE
+            </span>
           </button>
 
           {/* Zone 2: Clean single-line text navigation links */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-[#A0A4B0]">
             <button
+              type="button"
               onClick={() => handleNavClick('home')}
               className={`hover:text-[#F4F0E8] transition-colors py-1 whitespace-nowrap shrink-0 relative ${
                 currentPage === 'home' ? 'text-[#F4F0E8] font-semibold' : ''
@@ -64,6 +60,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             <button
+              type="button"
               onClick={() => handleNavClick('collection')}
               className={`hover:text-[#F4F0E8] transition-colors py-1 whitespace-nowrap shrink-0 relative ${
                 currentPage === 'collection' ? 'text-[#F4F0E8] font-semibold' : ''
@@ -76,12 +73,13 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             <button
+              type="button"
               onClick={() => {
                 if (currentPage !== 'home') {
                   onNavigate('home');
                   setTimeout(() => {
                     document.getElementById('abuja-districts')?.scrollIntoView({ behavior: 'smooth' });
-                  }, 100);
+                  }, 120);
                 } else {
                   document.getElementById('abuja-districts')?.scrollIntoView({ behavior: 'smooth' });
                 }
@@ -92,6 +90,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
 
             <button
+              type="button"
               onClick={() => handleNavClick('about')}
               className={`hover:text-[#F4F0E8] transition-colors py-1 whitespace-nowrap shrink-0 relative ${
                 currentPage === 'about' ? 'text-[#F4F0E8] font-semibold' : ''
@@ -104,58 +103,61 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           </nav>
 
-          {/* Zone 3: 1 primary action (+ subtle currency switcher) */}
+          {/* Zone 3: 1 primary action + subtle currency switcher */}
           <div className="flex items-center gap-3 shrink-0">
-            {/* Currency toggle */}
             <button
+              type="button"
               onClick={onToggleCurrency}
               title="Toggle Currency Display (NGN ₦ / USD $)"
-              className="px-2.5 py-1 text-xs font-medium rounded-lg border border-[#2A2D35] text-[#A0A4B0] hover:text-[#F4F0E8] hover:border-[#C5A880]/50 transition-colors bg-[#181A1F] whitespace-nowrap shrink-0"
+              className="px-2.5 py-1.5 text-xs font-medium rounded-lg glass-btn text-[#A0A4B0] hover:text-[#F4F0E8] transition-colors whitespace-nowrap shrink-0"
             >
               <span className="text-[#C5A880] font-semibold">{currency === 'NGN' ? '₦ NGN' : '$ USD'}</span>
             </button>
 
-            {/* Primary Action Button */}
             <button
+              type="button"
               onClick={onOpenConsultation}
-              className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-[#121316] bg-[#C5A880] hover:bg-[#D4AF37] rounded-lg transition-all shadow-md shadow-[#C5A880]/10 hover:shadow-lg hover:shadow-[#C5A880]/20 whitespace-nowrap shrink-0 active:scale-95"
+              className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-[#121316] bg-[#C5A880] hover:bg-[#D4AF37] rounded-lg glass-btn-gold transition-all whitespace-nowrap shrink-0 active:scale-95"
             >
               <PhoneCall className="w-3.5 h-3.5" />
               <span>Private Consultation</span>
             </button>
 
-            {/* Mobile menu button */}
             <button
+              type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-[#A0A4B0] hover:text-white rounded-lg focus:outline-none"
+              className="md:hidden p-2 text-[#A0A4B0] hover:text-white rounded-lg glass-btn focus:outline-none"
               aria-label="Toggle Navigation"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Glass Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[#181A1F] border-b border-[#2A2D35] px-4 pt-4 pb-6 space-y-3">
+        <div className="md:hidden max-w-7xl mx-auto mt-2 rounded-2xl glass-panel px-4 pt-4 pb-6 space-y-2.5 pointer-events-auto">
           <button
+            type="button"
             onClick={() => handleNavClick('home')}
             className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium ${
-              currentPage === 'home' ? 'bg-[#242832] text-[#C5A880]' : 'text-[#A0A4B0] hover:text-white'
+              currentPage === 'home' ? 'bg-white/10 text-[#C5A880]' : 'text-[#A0A4B0] hover:text-white'
             }`}
           >
             Home
           </button>
           <button
+            type="button"
             onClick={() => handleNavClick('collection')}
             className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium ${
-              currentPage === 'collection' ? 'bg-[#242832] text-[#C5A880]' : 'text-[#A0A4B0] hover:text-white'
+              currentPage === 'collection' ? 'bg-white/10 text-[#C5A880]' : 'text-[#A0A4B0] hover:text-white'
             }`}
           >
             Property Collection
           </button>
           <button
+            type="button"
             onClick={() => {
               handleNavClick('home');
               setTimeout(() => {
@@ -167,18 +169,20 @@ export const Navbar: React.FC<NavbarProps> = ({
             Abuja Prime Districts
           </button>
           <button
+            type="button"
             onClick={() => handleNavClick('about')}
             className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium ${
-              currentPage === 'about' ? 'bg-[#242832] text-[#C5A880]' : 'text-[#A0A4B0] hover:text-white'
+              currentPage === 'about' ? 'bg-white/10 text-[#C5A880]' : 'text-[#A0A4B0] hover:text-white'
             }`}
           >
             About & Advisory
           </button>
 
-          <div className="pt-2 border-t border-[#2A2D35] flex flex-col gap-2">
+          <div className="pt-2 border-t border-white/15 flex flex-col gap-2">
             <button
+              type="button"
               onClick={onOpenConsultation}
-              className="w-full py-3 text-center text-xs font-semibold uppercase tracking-wider text-[#121316] bg-[#C5A880] rounded-lg"
+              className="w-full py-3 text-center text-xs font-semibold uppercase tracking-wider text-[#121316] bg-[#C5A880] glass-btn-gold rounded-lg"
             >
               Request Private Consultation
             </button>

@@ -12,6 +12,14 @@ export const ASSET_IMAGES = {
   asokoro: asokoroEstateImg
 };
 
+export const ASSET_VIDEOS = {
+  heroReel: '/videos/abuja_hero_reel.mp4',
+  maitama: '/videos/maitama_tour.mp4',
+  asokoro: '/videos/asokoro_tour.mp4',
+  guzape: '/videos/guzape_tour.mp4',
+  katampe: '/videos/katampe_tour.mp4'
+};
+
 export interface Property {
   id: string;
   code: string;
@@ -30,6 +38,7 @@ export interface Property {
   amenities: string[];
   featured: boolean;
   images: string[];
+  videoUrl: string;
   sourceAttribution: string;
   sourceUrlText: string;
   lastVerifiedDate: string;
@@ -81,6 +90,7 @@ export const INITIAL_PROPERTIES: Property[] = [
       maitamaDuplexImg,
       heroVillaImg
     ],
+    videoUrl: '/videos/maitama_tour.mp4',
     sourceAttribution: 'PropertyPro Nigeria',
     sourceUrlText: 'propertypro.ng/advert/maitama-ministers-quarters-duplex',
     lastVerifiedDate: 'November 2026',
@@ -129,6 +139,7 @@ export const INITIAL_PROPERTIES: Property[] = [
       guzapeMansionImg,
       heroVillaImg
     ],
+    videoUrl: '/videos/guzape_tour.mp4',
     sourceAttribution: 'PropertyAgentsNG',
     sourceUrlText: 'propertyagentsng.com/listings/fha-guzape-5bed-detached',
     lastVerifiedDate: 'November 2026',
@@ -177,6 +188,7 @@ export const INITIAL_PROPERTIES: Property[] = [
       katampeResidenceImg,
       heroVillaImg
     ],
+    videoUrl: '/videos/katampe_tour.mp4',
     sourceAttribution: 'PropertyAgentsNG',
     sourceUrlText: 'propertyagentsng.com/listings/katampe-extension-4bed',
     lastVerifiedDate: 'November 2026',
@@ -225,6 +237,7 @@ export const INITIAL_PROPERTIES: Property[] = [
       asokoroEstateImg,
       heroVillaImg
     ],
+    videoUrl: '/videos/asokoro_tour.mp4',
     sourceAttribution: 'Nigeria Property Centre',
     sourceUrlText: 'nigeriapropertycentre.com/for-sale/houses/detached-duplexes/abuja/asokoro/1.2b-5bed-rooftop',
     lastVerifiedDate: 'November 2026',
@@ -273,6 +286,7 @@ export const INITIAL_PROPERTIES: Property[] = [
       heroVillaImg,
       maitamaDuplexImg
     ],
+    videoUrl: '/videos/abuja_hero_reel.mp4',
     sourceAttribution: 'Private Property Nigeria',
     sourceUrlText: 'privateproperty.com.ng/abuja/wuse-2/luxury-penthouse',
     lastVerifiedDate: 'November 2026',
@@ -321,6 +335,7 @@ export const INITIAL_PROPERTIES: Property[] = [
       heroVillaImg,
       asokoroEstateImg
     ],
+    videoUrl: '/videos/abuja_hero_reel.mp4',
     sourceAttribution: 'PropertyPro Nigeria',
     sourceUrlText: 'propertypro.ng/advert/maitama-ambassadorial-compound',
     lastVerifiedDate: 'November 2026',
