@@ -197,7 +197,7 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
                 </p>
               </div>
 
-              <div className="glass-champagne p-4 rounded-2xl min-w-[240px]">
+              <div className="glass-champagne p-4 rounded-2xl w-full md:w-auto md:min-w-[240px]">
                 <div className="text-[11px] uppercase tracking-wider text-[#C5A880]">Asking Price</div>
                 <div className="font-serif text-2xl sm:text-3xl font-bold text-white tabular-nums">
                   {currentPriceFormatted}

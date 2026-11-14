@@ -128,9 +128,9 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
 
       {/* FILTER CONTROLS BAR */}
       <div className="glass-card rounded-2xl p-5 space-y-4">
-        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
+        <div className="flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-4">
           {/* Search Input */}
-          <div className="relative flex-1 w-full lg:min-w-[260px]">
+          <div className="relative flex-1 w-full xl:min-w-[260px]">
             <Search className="absolute left-3.5 top-3 w-4 h-4 text-[#7E8392]" />
             <input
               type="text"
@@ -201,7 +201,7 @@ export const CollectionPage: React.FC<CollectionPageProps> = ({
           </div>
 
           {/* View Mode Toggle Buttons */}
-          <div className="flex items-center gap-1.5 p-1 bg-[#121316]/75 backdrop-blur-md border border-white/15 rounded-xl self-end lg:self-center">
+          <div className="flex items-center gap-1.5 p-1 bg-[#121316]/75 backdrop-blur-md border border-white/15 rounded-xl self-end xl:self-center">
             <button
               type="button"
               onClick={() => setViewMode('grid')}

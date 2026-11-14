@@ -24,17 +24,10 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
 
   const handleMouseEnter = () => {
     setIsHovered(true);
-    if (videoRef.current) {
-      videoRef.current.play().then(() => setIsPlayingVideo(true)).catch(() => {});
-    }
   };
 
   const handleMouseLeave = () => {
     setIsHovered(false);
-    setIsPlayingVideo(false);
-    if (videoRef.current) {
-      videoRef.current.pause();
-    }
   };
 
   const handleToggleVideo = (e: React.MouseEvent) => {

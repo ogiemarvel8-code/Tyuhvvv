@@ -79,7 +79,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onNavigate('home');
                   setTimeout(() => {
                     document.getElementById('abuja-districts')?.scrollIntoView({ behavior: 'smooth' });
-                  }, 120);
+                  }, 320);
                 } else {
                   document.getElementById('abuja-districts')?.scrollIntoView({ behavior: 'smooth' });
                 }
@@ -162,7 +162,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               handleNavClick('home');
               setTimeout(() => {
                 document.getElementById('abuja-districts')?.scrollIntoView({ behavior: 'smooth' });
-              }, 150);
+              }, 320);
             }}
             className="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-[#A0A4B0] hover:text-white"
           >

@@ -306,7 +306,7 @@ export const HomePage: React.FC<HomePageProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Video Player Column (7 cols) */}
             <div className="lg:col-span-7">
-              <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-[#121316] border border-white/15 shadow-2xl">
+              <div className="relative aspect-[4/3] sm:aspect-video w-full rounded-2xl overflow-hidden bg-[#121316] border border-white/15 shadow-2xl">
                 <video
                   key={activeReelProperty?.videoUrl}
                   src={activeReelProperty?.videoUrl || ASSET_VIDEOS.heroReel}
@@ -317,27 +317,27 @@ export const HomePage: React.FC<HomePageProps> = ({
                   playsInline
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#121316]/90 via-transparent to-black/30 pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#121316]/95 via-[#121316]/25 to-black/35 pointer-events-none" />
 
-                <div className="absolute top-4 left-4 glass-panel px-3 py-1.5 rounded-lg text-[11px] text-[#C5A880] font-medium flex items-center gap-2">
-                  <Film className="w-3.5 h-3.5" />
-                  <span>Architectural Motion Reel · {activeReelProperty?.district}</span>
+                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 glass-panel px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-[11px] text-[#C5A880] font-medium flex items-center gap-2">
+                  <Film className="w-3.5 h-3.5 shrink-0" />
+                  <span className="truncate">Architectural Motion Reel · {activeReelProperty?.district}</span>
                 </div>
 
                 {activeReelProperty && (
-                  <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-4">
-                    <div>
-                      <span className="text-[11px] text-[#C0C4D0] block">
+                  <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 flex flex-col sm:flex-row sm:items-end justify-between gap-2.5 sm:gap-4">
+                    <div className="min-w-0">
+                      <span className="text-[11px] text-[#C0C4D0] block truncate">
                         {activeReelProperty.locationDetail}
                       </span>
-                      <h3 className="font-serif text-lg sm:text-xl font-bold text-white leading-tight">
+                      <h3 className="font-serif text-base sm:text-xl font-bold text-white leading-tight line-clamp-2">
                         {activeReelProperty.title}
                       </h3>
                     </div>
                     <button
                       type="button"
                       onClick={() => onSelectProperty(activeReelProperty)}
-                      className="shrink-0 px-4 py-2 rounded-lg bg-[#C5A880] hover:bg-[#D4AF37] text-[#121316] text-xs font-semibold transition-colors glass-btn-gold"
+                      className="self-start sm:self-auto shrink-0 px-4 py-2 rounded-lg bg-[#C5A880] hover:bg-[#D4AF37] text-[#121316] text-xs font-semibold transition-colors glass-btn-gold"
                     >
                       Inspect Residence
                     </button>

@@ -11,25 +11,25 @@ interface AbujaInteractiveMapProps {
 }
 
 const DISTRICT_NODES: Record<string, { x: number; y: number; label: string; tag: string }> = {
-  'Katampe Extension': { x: 22, y: 24, label: 'Katampe Extension', tag: 'Diplomatic Hills' },
-  'Maitama': { x: 50, y: 30, label: 'Maitama', tag: "Ministers' Quarters" },
-  'Wuse II': { x: 26, y: 56, label: 'Wuse II', tag: 'Metropolitan Core' },
-  'Asokoro': { x: 76, y: 44, label: 'Asokoro', tag: 'Presidential Ridge' },
-  'Guzape': { x: 58, y: 74, label: 'Guzape', tag: 'FHA Diplomatic Zone' }
+  'Katampe Extension': { x: 22, y: 20, label: 'Katampe Extension', tag: 'Diplomatic Hills' },
+  'Maitama': { x: 50, y: 26, label: 'Maitama', tag: "Ministers' Quarters" },
+  'Wuse II': { x: 24, y: 48, label: 'Wuse II', tag: 'Metropolitan Core' },
+  'Asokoro': { x: 78, y: 34, label: 'Asokoro', tag: 'Presidential Ridge' },
+  'Guzape': { x: 46, y: 54, label: 'Guzape', tag: 'FHA Diplomatic Zone' }
 };
 
 function getPropertyCanvasPosition(prop: Property, indexInDistrict: number): { x: number; y: number } {
-  const base = DISTRICT_NODES[prop.district] || { x: 50, y: 50 };
+  const base = DISTRICT_NODES[prop.district] || { x: 50, y: 40 };
   const offsets = [
     { dx: 0, dy: 0 },
-    { dx: 7, dy: -6 },
-    { dx: -7, dy: 6 },
-    { dx: 6, dy: 6 }
+    { dx: 7, dy: -5 },
+    { dx: -7, dy: 5 },
+    { dx: 6, dy: 5 }
   ];
   const offset = offsets[indexInDistrict % offsets.length];
   return {
     x: Math.min(86, Math.max(14, base.x + offset.dx)),
-    y: Math.min(72, Math.max(18, base.y + offset.dy))
+    y: Math.min(56, Math.max(18, base.y + offset.dy))
   };
 }
 
@@ -98,7 +98,7 @@ export const AbujaInteractiveMap: React.FC<AbujaInteractiveMapProps> = ({
       </div>
 
       {/* Main Architectural Map Canvas */}
-      <div className="relative flex-1 w-full min-h-[380px] sm:min-h-[440px] bg-[#101215] overflow-hidden p-6 select-none">
+      <div className="relative flex-1 w-full min-h-[450px] sm:min-h-[460px] bg-[#101215] overflow-hidden p-6 select-none">
         {/* Subtle Architectural Grid Lines & Contour Rings */}
         <div className="absolute inset-0 opacity-20 pointer-events-none">
           <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
